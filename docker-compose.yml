@@ -1,0 +1,12 @@
+services:
+  ntfy-reminders:
+    build: .
+    container_name: ntfy-reminders
+    restart: unless-stopped
+    environment:
+      - TZ=Europe/London
+      - NTFY_TOKEN=${NTFY_TOKEN}
+      - NTFY_HOST=${NTFY_HOST}
+      - NTFY_TOPIC=${NTFY_TOPIC}
+      - MONGO_URI=${MONGO_URI}
+      - CRON_TZ=${CRON_TZ}
