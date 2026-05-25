@@ -4,7 +4,7 @@ services:
     container_name: ntfy-reminders
     restart: unless-stopped
     environment:
-      - TZ=Europe/London
+      - TZ=${CRON_TZ}
       - NTFY_TOKEN=${NTFY_TOKEN}
       - NTFY_HOST=${NTFY_HOST}
       - NTFY_TOPIC=${NTFY_TOPIC}
