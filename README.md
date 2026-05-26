@@ -1,12 +1,23 @@
 # ntfy-reminders
 
-A Node.js service that sends scheduled push notifications via [ntfy](https://ntfy.sh). Reminders are stored in MongoDB and automatically picked up every minute — no restart needed when adding new ones.
+A self-hosted reminder service that sends scheduled push notifications via [ntfy](https://ntfy.sh). Reminders are stored in MongoDB and managed through a Next.js web portal — no restart needed when adding new ones.
 
 ## How it works
 
-- On startup, reminders are fetched from MongoDB and scheduled using node-cron
+- The **node-server** fetches reminders from MongoDB on startup and schedules them using node-cron
 - Every minute, reminders are re-fetched and rescheduled to pick up any changes
 - Notifications are sent to your ntfy topic using Bearer token auth
+- The **portal** is a Next.js app for viewing and adding reminders
+
+## Project structure
+
+```
+ntfy-reminders/
+├── node-server/   # Cron-based notification service
+├── portal/        # Next.js management UI
+├── Dockerfile     # node-server Dockerfile (root, used by docker-compose)
+└── docker-compose.yml
+```
 
 ## Environment variables
 
@@ -22,6 +33,8 @@ MONGO_URI=mongodb://username:password@host:27017
 CRON_TZ=Europe/London
 ```
 
+The portal also reads `MONGO_URI` at runtime on the server side.
+
 ## Reminder document structure (MongoDB)
 
 Reminders are stored in the `reminders` collection of the `ntfy` database:
@@ -34,30 +47,36 @@ Reminders are stored in the `reminders` collection of the `ntfy` database:
 }
 ```
 
-The `cron` field uses standard cron syntax. node-cron also supports a 6-field format with seconds as the first field (e.g. `*/5 * * * * *` for every 5 seconds).
+The `cron` field uses standard 5-field cron syntax. node-cron also supports a 6-field format with seconds as the first field (e.g. `*/5 * * * * *` for every 5 seconds).
+
+## Running with Docker Compose
+
+```bash
+docker compose up -d
+```
+
+This starts two containers:
+
+| Container | Description | Port |
+|---|---|---|
+| `ntfy-reminders-server` | Cron notification service | — |
+| `ntfy-reminders-portal` | Next.js management portal | 47521 |
+
+The portal will be available at `http://localhost:47521`.
 
 ## Running locally
 
+**node-server:**
 ```bash
+cd node-server
 npm install
 node index.js
 ```
 
-## Running with Docker
-
+**portal:**
 ```bash
-docker build -t ntfy-reminders .
-docker run --env-file .env ntfy-reminders
+cd portal
+npm install
+npm run dev
 ```
 
-Or add it to your `docker-compose.yml`:
-
-```yaml
-ntfy-reminders:
-  image: ntfy-reminders
-  restart: always
-  environment:
-    TZ: Europe/London
-  env_file:
-    - .env
-```
