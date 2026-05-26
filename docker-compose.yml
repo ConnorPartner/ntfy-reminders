@@ -1,7 +1,9 @@
 services:
-  ntfy-reminders:
-    build: .
-    container_name: ntfy-reminders
+  node-server:
+    build:
+      context: ./node-server
+      dockerfile: Dockerfile
+    container_name: ntfy-reminders-server
     restart: unless-stopped
     environment:
       - TZ=${CRON_TZ}
@@ -10,3 +12,14 @@ services:
       - NTFY_TOPIC=${NTFY_TOPIC}
       - MONGO_URI=${MONGO_URI}
       - CRON_TZ=${CRON_TZ}
+
+  portal:
+    build:
+      context: ./portal
+      dockerfile: Dockerfile
+    container_name: ntfy-reminders-portal
+    restart: unless-stopped
+    ports:
+      - "47521:47521"
+    environment:
+      - NODE_ENV=production
