@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { getReminders, type Reminder } from "./utils/reminders";
+import { getReminders, deleteReminder, type Reminder } from "./utils/reminders";
+import DeleteButton from "./components/DeleteButton";
 
 export default function Home() {
   const [reminders, setReminders] = useState<Reminder[]>([]);
@@ -23,15 +24,15 @@ export default function Home() {
         reminders.map((reminder) => (
           <div
             key={reminder._id}
-            className="card w-96 bg-base-200 border-base-300 card-md shadow-md"
+            className="card w-96 bg-base-200 border-base-300 card-md shadow-md my-4"
           >
             <div className="card-body">
               <h2 className="card-title">{reminder.title}</h2>
               <p>{reminder.message}</p>
               <p className="text-gray-500">Cron: {reminder.cron}</p>
               <div className="justify-end card-actions">
-                <button className="btn btn-soft btn-default">Edit</button>
-                <button className="btn btn-soft btn-error">Delete</button>
+                <Link href={`/edit/${reminder._id}`} className="btn btn-soft btn-default">Edit</Link>
+                <DeleteButton id={reminder._id?.toString()} onDeleted={() => setReminders(prev => prev.filter(r => r._id !== reminder._id))}/>
               </div>
             </div>
           </div>

@@ -7,7 +7,7 @@ export default function New() {
     <div className="flex flex-col h-screen justify-center items-center">
       <NewForm />
       <Link href="/">
-        <button className="btn btn-soft mt-4">Back home</button>
+        <button className="btn btn-soft mt-4">Cancel</button>
       </Link>
     </div>
     </>
