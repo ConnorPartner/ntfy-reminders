@@ -1,7 +1,7 @@
 services:
-  node-server:
+  server:
     build:
-      context: ./node-server
+      context: ./server
       dockerfile: Dockerfile
     container_name: ntfy-reminders-server
     restart: unless-stopped
