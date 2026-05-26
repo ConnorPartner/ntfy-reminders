@@ -1,5 +1,5 @@
 {
-  "name": "portal",
+  "name": "ntfy-reminders-portal",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,7 +9,9 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "daisyui": "^5.5.20",
     "dotenv": "^17.4.2",
+    "mongodb": "^7.2.0",
     "next": "16.2.6",
     "react": "19.2.4",
     "react-dom": "19.2.4"
@@ -23,5 +25,6 @@
     "eslint-config-next": "16.2.6",
     "tailwindcss": "^4",
     "typescript": "^5"
-  }
+  },
+  "browserslist": "> 1%"
 }
