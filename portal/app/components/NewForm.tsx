@@ -33,7 +33,7 @@ export default function NewForm() {
         <input type="text" name="message" className="input" onInput={(m) => setMessage(m.currentTarget.value)} placeholder="Don't forget to feed the rabbit!" value={message} required />
 
         <label className="label">Cron</label>
-        <input type="text" name="cron" className="input" onInput={(c) => setCron(c.currentTarget.value)} placeholder="0 17 * * *" value={cron} required pattern="(@(annually|yearly|monthly|weekly|daily|hourly|reboot))|(@every (\d+(ns|us|µs|ms|s|m|h))+)|((((\d+,)+\d+|(\d+(\/|-)\d+)|\d+|\*) ?){5,7})" title="Enter a valid cron expression (e.g. 0 17 * * *)" />
+        <input type="text" name="cron" className="input" onInput={(c) => setCron(c.currentTarget.value)} placeholder="0 17 * * *" value={cron} required pattern="(@(annually|yearly|monthly|weekly|daily|hourly|reboot))|(@every (\d+(ns|us|µs|ms|s|m|h))+)|(((\*\/\d+|\d+(\/|-)\d+|(\d+,)+\d+|\d+|\*) ?){5,7})" title="Enter a valid cron expression (e.g. 0 17 * * *)" />
 
         <button type="submit" className="btn btn-soft btn-primary mt-4">Add</button>
 
