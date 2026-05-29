@@ -13,9 +13,8 @@ A self-hosted reminder service that sends scheduled push notifications via [ntfy
 
 ```
 ntfy-reminders/
-├── node-server/   # Cron-based notification service
+├── server/        # Cron-based notification service
 ├── portal/        # Next.js management UI
-├── Dockerfile     # node-server Dockerfile (root, used by docker-compose)
 └── docker-compose.yml
 ```
 
@@ -47,7 +46,7 @@ Reminders are stored in the `reminders` collection of the `ntfy` database:
 }
 ```
 
-The `cron` field uses standard 5-field cron syntax. node-cron also supports a 6-field format with seconds as the first field (e.g. `*/5 * * * * *` for every 5 seconds).
+The `cron` field uses standard 5-field cron syntax (`minute hour * * day`). The portal's day/time pickers generate this automatically — supported day values are `*` (everyday), `0` (Sunday) through `6` (Saturday).
 
 ## Running with Docker Compose
 
@@ -66,9 +65,9 @@ The portal will be available at `http://localhost:47521`.
 
 ## Running locally
 
-**node-server:**
+**server:**
 ```bash
-cd node-server
+cd server
 npm install
 node index.js
 ```
