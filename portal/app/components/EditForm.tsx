@@ -3,17 +3,24 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Reminder, updateReminder } from '@/app/utils/reminders';
+import { convertToCron, convertFromCron } from "@/app/utils/cronFunctions";
+import DayPicker from "./DayPicker";
+import TimePicker from "./TimePicker";
 
 export default function EditForm({ reminder }: { reminder: Reminder }) {
 
   const router = useRouter();
   const [title, setTitle] = useState(reminder.title);
   const [message, setMessage] = useState(reminder.message);
-  const [cron, setCron] = useState(reminder.cron);
+  const { day: initialDay, hour: initialHour, minute: initialMinute } = convertFromCron(reminder.cron);
+  const [day, setDay] = useState(initialDay);
+  const [hour, setHour] = useState(initialHour);
+  const [minute, setMinute] = useState(initialMinute);
   const [status, setStatus] = useState('');
 
   async function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
+    const cron = convertToCron({ day, hour, minute });
     const result = await updateReminder({ ...reminder, title, message, cron });
     setStatus(result.status);
     if (result.status === 'success') {
@@ -32,8 +39,10 @@ export default function EditForm({ reminder }: { reminder: Reminder }) {
         <label className="label">Message</label>
         <input type="text" name="message" className="input" onInput={(m) => setMessage(m.currentTarget.value)} placeholder="Don't forget to feed the rabbit!" value={message} required />
 
-        <label className="label">Cron</label>
-        <input type="text" name="cron" className="input" onInput={(c) => setCron(c.currentTarget.value)} placeholder="0 17 * * *" value={cron} required pattern="(@(annually|yearly|monthly|weekly|daily|hourly|reboot))|(@every (\d+(ns|us|µs|ms|s|m|h))+)|(((\*\/\d+|\d+(\/|-)\d+|(\d+,)+\d+|\d+|\*) ?){5,7})" title="Enter a valid cron expression (e.g. 0 17 * * *)" />
+        <label className="label">Day</label>
+        <DayPicker day={day} setDay={setDay} />
+
+        <TimePicker hour={hour} minute={minute} setHour={setHour} setMinute={setMinute} />
 
         <button type="submit" className="btn btn-soft btn-primary mt-4">Update</button>
 
