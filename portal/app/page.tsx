@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { getReminders, deleteReminder, type Reminder } from "./utils/reminders";
 import DeleteButton from "./components/DeleteButton";
+import { cronToString } from "./utils/cronFunctions";
 
 export default function Home() {
   const [reminders, setReminders] = useState<Reminder[]>([]);
@@ -29,7 +30,7 @@ export default function Home() {
             <div className="card-body">
               <h2 className="card-title">{reminder.title}</h2>
               <p>{reminder.message}</p>
-              <p className="text-gray-500">Cron: {reminder.cron}</p>
+              <p className="text-gray-500">{cronToString(reminder.cron)}</p>
               <div className="justify-end card-actions">
                 <Link href={`/edit/${reminder._id}`} className="btn btn-soft btn-default">Edit</Link>
                 <DeleteButton id={reminder._id?.toString()} onDeleted={() => setReminders(prev => prev.filter(r => r._id !== reminder._id))}/>
